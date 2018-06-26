@@ -1,0 +1,13 @@
+name: serialize.cr
+version: 0.1.0
+
+authors:
+  - Colonlc <thml@gmx.de>
+
+crystal: 0.24.2
+
+license: Zlib
+
+dependencies:
+  msgpack:
+    github: crystal-community/msgpack-crystal
