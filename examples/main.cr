@@ -1,12 +1,8 @@
-# require "yaml"
-# require "json"
-
 require "../src/**"
 
 class Container
   include Serializable
 
-  # @union : (String | A | B).class
   @bytes : Bytes
 
   @@classvar = [1,2,3,4,5]
@@ -26,11 +22,12 @@ class Container
     @tuple1 = { "tuple1" }
     @tuple2 = { "tuple2", 999}
     @tuple3 = { "tuple3", 3u64, nil }
-    @ntuple = { a: "ntuple", b: 7, c: nil, d: A.new(9u8)}
     @enum = C::Lol
     @allenum = [C::Lol, C::Rofl, C::Lmao]
-    @time = Time.now
     @bytes = IO::Memory.new("01234").to_slice
+    # @sym = :symbols
+    # @time = Time.now
+    # @ntuple = { a: "ntuple", b: 7, c: nil, d: A.new(9u8)}
   end
 end
 
@@ -43,6 +40,8 @@ end
 
 struct B
   include Serializable
+
+  @@lol = 1337
 
   def initialize(@string : String)
   end
@@ -63,21 +62,23 @@ end
 
 # Test code
 
-# obj = Container.new
-# yaml = obj.to_yaml
+obj = Container.new
+yaml = obj.ser_yaml
 
-# puts Container.from_yaml(obj.to_yaml).to_yaml == yaml
-# puts Container.from_json(obj.to_json).to_yaml == yaml
-# puts Container.from_msgpack(obj.to_msgpack).to_yaml == yaml
+puts "Correct serialization and deserialization with YAML: #{ Container.deser_yaml(obj.ser_yaml).ser_yaml == yaml }"
+puts "Correct serialization and deserialization with MessagePack: #{ Container.deser_msgpack(obj.ser_msgpack).ser_yaml == yaml }"
 
-puts NamedTuple(name: String, year: Int32).from_ser_hash({name: "Crystal", year: 2011}.to_ser_hash)
-# puts ({name: "Crystal", year: 2011}).to_ser_hash.class
+# yaml = Container.ser_class_yaml
+#
+# Container.load_class_yaml yaml
+# puts Container.ser_class_yaml == yaml
+#
+# Container.load_class_msgpack Container.ser_class_msgpack
+# puts Container.ser_class_yaml == yaml
 
 # TODO
 
-# from_ser_hash without only YAML::Any
-
-# Enum, Union, NamedTuple, Time[::Format]
+# NamedTuple, Time[::Format], Symbols
 # Classvars
 
 # Benchmarks

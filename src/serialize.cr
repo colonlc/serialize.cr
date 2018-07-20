@@ -12,15 +12,15 @@ module Serializable
     {% end %} } {% end %}
   end
 
-  def to_yaml
+  def ser_yaml
     to_ser_hash.to_yaml
   end
 
-  def to_json
-    to_ser_hash.to_json
-  end
+  # def ser_json
+  #   to_ser_hash.to_json
+  # end
 
-  def to_msgpack
+  def ser_msgpack
     to_ser_hash.to_msgpack
   end
 
@@ -39,21 +39,70 @@ module Serializable
       instance
     end
 
-    def self.from_yaml(string_or_io : String | IO)
+    def self.deser_yaml(string_or_io : String | IO)
       from_ser_hash YAML.parse(string_or_io)
     end
 
-    def self.from_json(string_or_io : String | IO)
-      from_yaml JSON.parse(string_or_io).as_h.to_yaml
+    # def self.deser_json(string_or_io : String | IO)
+    #   deser_yaml JSON.parse(string_or_io).to_yaml # IDN, cannot convert the JSON Hash to YAML..
+    # end
+
+    def self.deser_msgpack(string_or_io : String | IO)
+      deser_yaml MessagePack::Unpacker.new(string_or_io).read_hash.to_yaml
     end
 
-    def self.from_msgpack(string_or_io : String | IO)
-      # puts Serializable.conv(MessagePack::Unpacker.new(string_or_io).read_hash["string"], Hash)["type"]
-      from_yaml MessagePack::Unpacker.new(string_or_io).read_hash.to_yaml
+    def self.deser_msgpack(bytes : Bytes)
+      deser_msgpack IO::Memory.new(bytes)
     end
 
-    def self.from_msgpack(bytes : Bytes)
-      from_msgpack IO::Memory.new(bytes)
-    end
+    #############
+    # Classvars #
+    #############
+
+    # def to_class_ser_hash
+    #   hash = {% begin %} {
+    #     "type" => "CLASS_" + {{ @type.id.stringify }},
+    #   {% for cvar in @type.class.instance_vars %}
+    #     "{{cvar.id}}" => @{{ cvar.id }}.to_ser_hash,
+    #   {% end %} } {% end %}
+    # end
+    
+    # def ser_class_yaml
+    #   to_class_ser_hash.to_yaml
+    # end
+
+    # # def ser_class_json
+    # #   to_class_ser_hash.to_json
+    # # end
+
+    # def ser_class_msgpack
+    #   to_class_ser_hash.to_msgpack
+    # end
+
+    ################################
+    # Loading serialized classvars #
+    ################################
+
+    # def self.load_class_ser_hash(hash)
+    #   {% for cvar in @type.class.instance_vars %}
+    #     @{{ cvar.id }} = {{ cvar.type.id }}.from_ser_hash hash[{{ cvar.id.stringify }}]
+    #   {% end %}
+    # end
+
+    # def self.load_class_yaml(string_or_io : String | IO)
+    #   load_class_ser_hash YAML.parse(string_or_io)
+    # end
+
+    # # def self.load_class_json(string_or_io : String | IO)
+    # #   load_class_ser_hash JSON.parse(string_or_io).to_yaml # IDN, cannot convert the JSON Hash to YAML..
+    # # end
+
+    # def self.load_class_msgpack(string_or_io : String | IO)
+    #   load_class_yaml MessagePack::Unpacker.new(string_or_io).read_hash.to_yaml
+    # end
+
+    # def self.load_class_msgpack(bytes : Bytes)
+    #   load_class_msgpack IO::Memory.new(bytes)
+    # end
   end # End macro included
 end # End module Serializable

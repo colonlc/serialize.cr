@@ -145,45 +145,45 @@ struct Tuple
   {% end %}
 end
 
-struct NamedTuple
-  def to_ser_hash
-    {
-      "type" => {{ @type.id.stringify }},
-      "value" => to_h.to_ser_hash
-    }
-  end
+# struct NamedTuple
+#   def to_ser_hash
+#     {
+#       "type" => {{ @type.id.stringify }},
+#       "value" => to_h.to_ser_hash
+#     }
+#   end
+#
+#   {% begin %}
+#     def self.from_ser_hash(hash) : self
+#       if hash["type"] == \{{ @type.id.stringify }}
+#         hash = \{% begin %}Hash(Symbol, \{% begin %}Union(\{% for key, typ in T %}\{{typ}},\{% end %})\{% end %})\{% end %}.from_ser_hash(hash["value"])
+#         return self.from(hash)
+#         raise "not reached"
+#       else
+#         raise "Invalid parse type: expected {{ @type.id }}, got #{hash["type"]}"
+#       end
+#     end
+#   {% end %}
+# end
 
-  {% begin %}
-    def self.from_ser_hash(hash) : self
-      if hash["type"] == \{{ @type.id.stringify }}
-        hash = \{% begin %}Hash(Symbol, \{% begin %}Union(\{% for key, typ in T %}\{{typ}},\{% end %})\{% end %})\{% end %}.from_ser_hash(hash["value"])
-        return self.from(hash)
-        raise "not reached"
-      else
-        raise "Invalid parse type: expected {{ @type.id }}, got #{hash["type"]}"
-      end
-    end
-  {% end %}
-end
-
-struct Symbol
-  def to_ser_hash
-    {
-      "type" => {{ @type.id.stringify }},
-      "value" => to_i
-    }
-  end
-
-  {% begin %}
-    def self.from_ser_hash(hash) : self
-      if hash["type"] == \{{ @type.id.stringify }}
-        hash["value"].as_i
-      else
-        raise "Invalid parse type: expected {{ @type.id }}, got #{hash["type"]}"
-      end
-    end
-  {% end %}
-end
+# struct Symbol
+#   def to_ser_hash
+#     {
+#       "type" => {{ @type.id.stringify }},
+#       "value" => to_i
+#     }
+#   end
+#
+#   {% begin %}
+#     def self.from_ser_hash(hash) : self
+#       if hash["type"] == \{{ @type.id.stringify }}
+#         hash["value"].as_i
+#       else
+#         raise "Invalid parse type: expected {{ @type.id }}, got #{hash["type"]}"
+#       end
+#     end
+#   {% end %}
+# end
 
 struct Enum
   def to_ser_hash
@@ -226,21 +226,21 @@ struct Slice
   {% end %}
 end
 
-struct Time
-  def to_ser_hash
-    {
-      "type" => {{ @type.id.stringify }},
-      "value" => Time::Format.new("%F %X.%L %:z").format(self)
-    }
-  end
-
-  {% begin %}
-    def self.from_ser_hash(hash) : self
-      if hash["type"] == \{{ @type.id.stringify }}
-        hash["value"].as_time
-      else
-        raise "Invalid parse type: expected {{ @type.id }}, got #{hash["type"]}"
-      end
-    end
-  {% end %}
-end
+# struct Time
+#   def to_ser_hash
+#     {
+#       "type" => {{ @type.id.stringify }},
+#       "value" => Time::Format.new("%F %X.%L %:z").format(self)
+#     }
+#   end
+#
+#   {% begin %}
+#     def self.from_ser_hash(hash) : self
+#       if hash["type"] == \{{ @type.id.stringify }}
+#         hash["value"].as_time
+#       else
+#         raise "Invalid parse type: expected {{ @type.id }}, got #{hash["type"]}"
+#       end
+#     end
+#   {% end %}
+# end
