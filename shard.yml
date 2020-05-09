@@ -2,9 +2,9 @@ name: serialize.cr
 version: 0.1.0
 
 authors:
-  - Colonlc <thml@gmx.de>
+  - vypxl <thomas@vypxl.io>
 
-crystal: 0.24.2
+crystal: 0.34.0
 
 license: Zlib
 

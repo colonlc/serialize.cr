@@ -1,5 +1,7 @@
 # serialize.cr
 
+> This project will probably never get finished. If you want to use it, you may ask me, but I probably won't continue working on this.
+
 Provides easy serialization of arbitrary complex objects in JSON/Yaml and Messagepack.
 This uses the [msgpack-crystal](https://github.com/crystal-community/msgpack-crystal) library by crystal-community.
 
@@ -28,7 +30,7 @@ Add this to your application's `shard.yml`:
 ```yaml
 dependencies:
   serialize.cr:
-    github: colonlc/serialize.cr
+    github: vypxl/serialize.cr
 ```
 
 ## Usage
@@ -43,16 +45,6 @@ new_from_yaml = Obj.deser_yaml yaml # deserialize from YAML
 new_from_msgpack = Obj.deser_msgpack mp # deserialize from MessagePack
 ```
 
-## Contributing
-
-I appreciate any help because I got little time for this project.
-
-1. Fork it ( https://github.com/colonlc/serialize.cr/fork )
-2. Create your feature branch (git checkout -b my-new-feature)
-3. Commit your changes (git commit -am 'Add some feature')
-4. Push to the branch (git push origin my-new-feature)
-5. Create a new Pull Request
-
 ## Contributors
 
-- [Colonlc](https://github.com/colonlc) Colonlc - creator, maintainer
+- [vypxl](https://github.com/vypxl) - creator, maintainer
